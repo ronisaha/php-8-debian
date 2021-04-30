@@ -35,3 +35,6 @@ This use the fpm base image
 
 ### php-8.0-buster:apache
 This use the apache base image
+
+### php-8.0-buster:dev
+This use the apache base image with xdebug enabled
