@@ -34,7 +34,8 @@ RUN set -eux; \
 	\
 	pecl install apcu; \
   pecl install yaml; \
-  docker-php-ext-enable apcu yaml; \
+  pecl install igbinary; \
+  docker-php-ext-enable apcu yaml igbinary; \
   docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure gd; \
   docker-php-ext-install -j$(nproc) gd; \
@@ -42,6 +43,7 @@ RUN set -eux; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
         exif \
+        bcmath \
         xsl \
         gettext \
         opcache \
@@ -50,13 +52,10 @@ RUN set -eux; \
         pdo_pgsql \
         pgsql \
         soap \
+        zip \
         sockets; \
-  pecl install igbinary; \
-  docker-php-ext-enable igbinary; \
   echo 'yes,yes' | pecl install redis; \
-  docker-php-ext-configure zip --with-libzip; \
-  docker-php-ext-install zip ;\
-  docker-php-ext-enable apcu yaml redis; \
+  docker-php-ext-enable redis; \
 	cd /tmp; \
 	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb; \
   dpkg -i wkhtmltox_0.12.6-1.buster_amd64.deb; \
@@ -110,12 +109,7 @@ RUN { \
         echo 'ignore_repeated_errors = On'; \
         echo 'ignore_repeated_source = Off'; \
         echo 'html_errors = Off'; \
-    } > /usr/local/etc/php/conf.d/error-logging.ini ; \
-    { \
-            echo 'request_terminate_timeout = 300'; \
-            echo 'rlimit_files = 131072'; \
-            echo 'rlimit_core = unlimited'; \
-    } >> /usr/local/etc/php-fpm.d/zz-docker.conf
+    } > /usr/local/etc/php/conf.d/error-logging.ini
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
