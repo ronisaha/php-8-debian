@@ -1,4 +1,4 @@
-FROM php:8.0.5-cli-buster
+FROM php:8.0.8-cli-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 

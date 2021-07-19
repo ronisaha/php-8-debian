@@ -1,4 +1,4 @@
-FROM php:8.0.5-apache-buster
+FROM php:8.0.8-apache-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
