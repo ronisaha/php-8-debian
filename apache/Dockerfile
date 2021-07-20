@@ -9,7 +9,7 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 
-#install Exetentions and dependencies
+#install exetentions and dependencies
 RUN set -eux; \
 	\
 	apt-get update && apt -y upgrade; \
