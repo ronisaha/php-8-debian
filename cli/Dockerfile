@@ -1,4 +1,4 @@
-FROM php:8.0.8-cli-buster
+FROM php:8.0.10-cli-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
@@ -7,7 +7,7 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
-	apt-get update && apt -y upgrade; \
+	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 	  nodejs npm \
 		libicu-dev \
