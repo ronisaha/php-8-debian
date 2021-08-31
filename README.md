@@ -1,5 +1,5 @@
 # php-8.0-buster
-Docker image with php-8.0.8-buster
+Docker image with php-8.0.10-buster
 
 All image contain following php extension, wkhtmltopdf-0.12.6 with patched QT and composer.
 
