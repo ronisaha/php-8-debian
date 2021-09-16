@@ -116,9 +116,7 @@ RUN { \
         echo 'html_errors = Off'; \
     } > /usr/local/etc/php/conf.d/error-logging.ini
 
-RUN { \
-            echo 'LimitRequestFieldSize 5242880'; \
-    } >> /etc/apache2/apache2.conf
+RUN echo 'LimitRequestFieldSize 5242880' >> /etc/apache2/apache2.conf
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
