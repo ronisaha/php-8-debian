@@ -1,4 +1,4 @@
-FROM php:8.0.10-apache-buster
+FROM php:8.0.11-apache-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
@@ -123,3 +123,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN a2enmod rewrite
+
+RUN set -eux; \
+    	\
+    	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
+      chmod +x /usr/local/bin/merge2pdf
