@@ -1,4 +1,4 @@
-FROM php:8.0.11-fpm-buster
+FROM php:8.0.12-fpm-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
