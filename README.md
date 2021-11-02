@@ -38,3 +38,6 @@ This use the apache base image
 
 ### php-8.0-buster:dev
 This use the apache base image with xdebug enabled
+
+### php-8.0-buster:supervisor
+This use the fpm base image and set supervisor as entry point. Mount any supervisor config file as /etc/supervisor/conf.d/*.conf
