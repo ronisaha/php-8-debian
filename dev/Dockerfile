@@ -1,4 +1,4 @@
-FROM php:8.0.12-apache-buster
+FROM php:8.0.13-apache-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
@@ -78,7 +78,7 @@ RUN set -eux; \
     ldconfig ;\
 	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
 	pecl install xdebug; \
-	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/download/1.2.24/install-php-extensions > /usr/local/bin/install-php-extensions \
+	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.2/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
   install-php-extensions imagick amqp; \
