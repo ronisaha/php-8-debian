@@ -76,7 +76,7 @@ RUN set -eux; \
     rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci; \
     echo /usr/lib/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf ;\
     ldconfig ;\
-	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
+	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8-3.0.1; \
 	docker-php-ext-enable oci8; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.2/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \
