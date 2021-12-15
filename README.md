@@ -13,7 +13,7 @@ All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.c
 - PDO
 - pdo_pgsql
 - pdo_mysql
-- oci8
+- oci8-3.0.1
 - SimpleXML
 - tokenizer
 - Zend OPcache
@@ -30,7 +30,7 @@ All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.c
 ### php-8.0-buster:cli
 This use the cli base image also contain nodejs and npm
 
-### php-8.0-buster:fpm
+### php-8.0-buster:fpm or php-8.0-buster:latest
 This use the fpm base image
 
 ### php-8.0-buster:apache
