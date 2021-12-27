@@ -9,7 +9,6 @@ RUN set -eux; \
 	\
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
-	  nodejs npm \
 		libicu-dev \
     libzip-dev \
         libyaml-dev \
@@ -32,6 +31,8 @@ RUN set -eux; \
         xfonts-base \
 	; \
 	\
+	curl -sL https://deb.nodesource.com/setup_16.x  | bash - ; \
+  apt-get -y install nodejs; \
 	pecl install apcu; \
   pecl install yaml; \
   pecl install igbinary; \
