@@ -1,4 +1,4 @@
-FROM php:8.0.13-fpm-buster
+FROM php:8.0.16-fpm-buster
 
 MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
 
@@ -7,6 +7,7 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
+	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip supervisor \
 		libicu-dev \
@@ -29,6 +30,7 @@ RUN set -eux; \
         libxrender1 \
         xfonts-75dpi \
         xfonts-base \
+        ttf-mscorefonts-installer \
 	; \
 	\
 	pecl install apcu; \
