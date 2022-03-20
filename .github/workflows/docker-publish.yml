@@ -26,6 +26,7 @@ jobs:
             VERSION=${folder##*/}
 
             tmpName="image-$RANDOM"
+            cp -r fonts $folder/
             docker build $folder --file $folder/Dockerfile --tag $tmpName
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}
 
