@@ -129,3 +129,6 @@ RUN set -eux; \
     	\
     	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
       chmod +x /usr/local/bin/merge2pdf
+
+COPY fonts /usr/share/fonts/truetype
+RUN fc-cache -f -v
