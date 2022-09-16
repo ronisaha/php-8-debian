@@ -1,4 +1,4 @@
-FROM php:8.0.16-fpm-buster
+FROM php:8.0.23-fpm-buster
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
