@@ -108,12 +108,7 @@ RUN { \
         echo 'ignore_repeated_errors = On'; \
         echo 'ignore_repeated_source = Off'; \
         echo 'html_errors = Off'; \
-    } > /usr/local/etc/php/conf.d/error-logging.ini ; \
-    { \
-            echo 'request_terminate_timeout = 300'; \
-            echo 'rlimit_files = 131072'; \
-            echo 'rlimit_core = unlimited'; \
-    } >> /usr/local/etc/php-fpm.d/zz-docker.conf
+    } > /usr/local/etc/php/conf.d/error-logging.ini
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
