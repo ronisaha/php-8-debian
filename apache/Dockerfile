@@ -1,6 +1,6 @@
-FROM php:8.0.16-apache-buster
+FROM php:8.2-apache-bullseye
 
-MAINTAINER Roni Kumar Saha <roni.csed@gmail.com>
+LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
 ENV APACHE_DOCUMENT_ROOT /var/www/public
 
@@ -43,8 +43,6 @@ RUN set -eux; \
   pecl install igbinary; \
   docker-php-ext-enable apcu yaml igbinary; \
   docker-php-ext-install -j$(nproc) iconv; \
-  docker-php-ext-configure gd; \
-  docker-php-ext-install -j$(nproc) gd; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -63,9 +61,9 @@ RUN set -eux; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
 	cd /tmp; \
-	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb; \
-  dpkg -i wkhtmltox_0.12.6-1.buster_amd64.deb; \
-  rm -rf wkhtmltox_0.12.6-1.buster_amd64.deb; \
+	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+  dpkg -i wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+  rm -rf wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip ; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
     ;\
@@ -78,12 +76,12 @@ RUN set -eux; \
     rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci; \
     echo /usr/lib/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf ;\
     ldconfig ;\
-	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8-3.0.1; \
+	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
 	docker-php-ext-enable oci8; \
-	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.2/install-php-extensions > /usr/local/bin/install-php-extensions \
+	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions imagick amqp; \
+  install-php-extensions gd imagick amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\
