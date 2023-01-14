@@ -1,4 +1,4 @@
-FROM php:8.2-cli-bullseye
+FROM php:8.2.1-cli-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
