@@ -27,17 +27,17 @@ All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.c
 - iconv
 
 ## Image Variants
-### php-8-debain:cli
+### php-8-debain:cli or php-8-debain:cli-{php-version}
 This use the cli base image also contain nodejs-18.x and npm
 
-### php-8-debain:fpm
+### php-8-debain:fpm or php-8-debain:fpm-{php-version}
 This use the fpm base image
 
-### php-8-debain:apache
+### php-8-debain:apache or php-8-debain:apache-{php-version}
 This use the apache base image
 
-### php-8-debain:dev
+### php-8-debain:dev or php-8-debain:dev-{php-version}
 This use the apache base image with xdebug enabled
 
-### php-8-debain:supervisor
+### php-8-debain:supervisor or php-8-debain:supervisor-{php-version}
 This use the fpm base image and set supervisor as entry point. Mount any supervisor config file as /etc/supervisor/conf.d/*.conf
