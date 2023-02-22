@@ -24,14 +24,17 @@ jobs:
           do
             folder=${dockerFilePath%"/Dockerfile"}
             VERSION=${folder##*/}
+            PHP_VERSION=8.2.2
 
             tmpName="image-$RANDOM"
             cp -r fonts $folder/
-            docker build $folder --file $folder/Dockerfile --tag $tmpName
+            docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}
 
             docker tag $tmpName $IMAGE_ID:$VERSION
             docker push $IMAGE_ID:$VERSION
+            docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
+            docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
             if [ "$VERSION" == "fpm" ]; then docker tag $tmpName $IMAGE_ID:latest; fi
             if [ "$VERSION" == "fpm" ]; then docker push $IMAGE_ID:latest; fi
           done;
