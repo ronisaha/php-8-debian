@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.2.3
+ARG PHP_VERSION=8.2.4
 FROM php:${PHP_VERSION}-fpm-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -74,8 +74,8 @@ RUN set -eux; \
     ldconfig ;\
 	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
 	docker-php-ext-enable oci8; \
-	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.2/install-php-extensions > /usr/local/bin/install-php-extensions \
-  ; \
+	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
+        ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
   install-php-extensions gd imagick amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
