@@ -1,5 +1,5 @@
 # php-8-debain
-Docker image with php:8.2.7-bullseye
+Docker image with php:8.2.8-bullseye
 
 All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.com/wkhtmltopdf/wkhtmltopdf/) with patched QT, [merge2pdf](https://github.com/ajaxray/merge2pdf) and [composer](https://github.com/composer/composer).
 
