@@ -1,5 +1,5 @@
 # php-8-debain
-Docker image with php:8.2.8-bullseye
+Docker image with php:8.2.x-bullseye
 
 All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.com/wkhtmltopdf/wkhtmltopdf/) with patched QT, [merge2pdf](https://github.com/ajaxray/merge2pdf) and [composer](https://github.com/composer/composer).
 
@@ -28,7 +28,7 @@ All image contain following php extension, [wkhtmltopdf-0.12.6](https://github.c
 
 ## Image Variants
 ### php-8-debain:cli or php-8-debain:cli-{php-version}
-This use the cli base image also contain nodejs-18.x and npm
+This use the cli base image with xdebug enabled, also contain nodejs-18.x and npm
 
 ### php-8-debain:fpm or php-8-debain:fpm-{php-version}
 This use the fpm base image

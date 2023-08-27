@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.2.8
+ARG PHP_VERSION=8.2.9
 FROM php:${PHP_VERSION}-cli-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -75,7 +75,8 @@ RUN set -eux; \
     echo /usr/lib/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf ;\
     ldconfig ;\
 	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
-	docker-php-ext-enable oci8; \
+    pecl install xdebug; \
+	docker-php-ext-enable oci8 xdebug; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
