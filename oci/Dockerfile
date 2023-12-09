@@ -20,10 +20,9 @@ RUN set -eux; \
         libpq-dev  \
         imagemagick \
         libxslt1-dev \
-        \
         libjpeg62-turbo \
         libpng16-16 \
-	; \
+    ; \
 	\
 	pecl install apcu; \
   pecl install yaml; \
@@ -47,17 +46,32 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
-  	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
-    ; \
-    chmod +x /usr/local/bin/install-php-extensions ; \
-    install-php-extensions gd Imagick/imagick@master amqp; \
-    rm -f /usr/local/bin/install-php-extensions; \
-  	\
-  	docker-php-source delete ;\
-  	apt-get remove -y g++ wget ;\
-  	apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y ;\
-    rm -rf /var/lib/apt/lists/*; \
-    rm -rf /tmp/* /var/tmp/*;
+	cd /tmp; \
+	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip ; \
+	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
+    ;\
+    unzip instantclient-basiclite-linuxx64.zip ; \
+    unzip instantclient-sdk-linuxx64.zip ;\
+    rm -f instantclient-basiclite-linuxx64.zip; \
+    rm -f instantclient-sdk-linuxx64.zip; \
+    mv instantclient*/ /usr/lib/instantclient; \
+    cd /usr/lib/instantclient ; \
+    rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci; \
+    echo /usr/lib/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf ;\
+    ldconfig ;\
+	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
+	docker-php-ext-enable oci8; \
+	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
+        ; \
+  chmod +x /usr/local/bin/install-php-extensions ; \
+  install-php-extensions gd Imagick/imagick@master amqp; \
+  rm -f /usr/local/bin/install-php-extensions; \
+	\
+	docker-php-source delete ;\
+	apt-get remove -y g++ wget ;\
+	apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y ;\
+  rm -rf /var/lib/apt/lists/*; \
+  rm -rf /tmp/* /var/tmp/*;
 
 ## Set php configuration overrides
 RUN { \

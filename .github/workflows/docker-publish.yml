@@ -24,10 +24,9 @@ jobs:
           do
             folder=${dockerFilePath%"/Dockerfile"}
             VERSION=${folder##*/}
-            PHP_VERSION=8.2.13
+            PHP_VERSION=8.3.0
 
             tmpName="image-$RANDOM"
-            cp -r fonts $folder/
             docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}
 

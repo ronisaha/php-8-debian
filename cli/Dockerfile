@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.2.13
+ARG PHP_VERSION=8.3.0
 FROM php:${PHP_VERSION}-cli-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -10,9 +10,15 @@ RUN set -eux; \
 	\
 	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
+    apt-get install -y ca-certificates curl gnupg; \
+    mkdir -p /etc/apt/keyrings; \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg; \
+    NODE_MAJOR=20 \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list; \
+    apt-get update; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
-    libzip-dev \
+       libzip-dev \
         libyaml-dev \
         gettext \
         libmagickwand-dev\
@@ -21,22 +27,12 @@ RUN set -eux; \
         imagemagick \
         libxslt1-dev \
         \
-        fontconfig \
-        libfreetype6 \
         libjpeg62-turbo \
         libpng16-16 \
-        libx11-6 \
-        libxcb1 \
-        libxext6 \
-        libxrender1 \
-        xfonts-75dpi \
-        xfonts-base \
-        ttf-mscorefonts-installer \
 	; \
 	\
-	curl -sL https://deb.nodesource.com/setup_18.x  | bash - ; \
   apt-get -y install nodejs; \
-	pecl install apcu; \
+  pecl install apcu; \
   pecl install yaml; \
   pecl install igbinary; \
   docker-php-ext-enable apcu yaml igbinary; \
@@ -58,29 +54,12 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
-	cd /tmp; \
-	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-  dpkg -i wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-  rm -rf wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip ; \
-	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
-    ;\
-    unzip instantclient-basiclite-linuxx64.zip ; \
-    unzip instantclient-sdk-linuxx64.zip ;\
-    rm -f instantclient-basiclite-linuxx64.zip; \
-    rm -f instantclient-sdk-linuxx64.zip; \
-    mv instantclient*/ /usr/lib/instantclient; \
-    cd /usr/lib/instantclient ; \
-    rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci; \
-    echo /usr/lib/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf ;\
-    ldconfig ;\
-	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
     pecl install xdebug; \
-	docker-php-ext-enable oci8 xdebug; \
+	docker-php-ext-enable xdebug; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions gd imagick amqp; \
+  install-php-extensions gd Imagick/imagick@master amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\
@@ -117,11 +96,3 @@ RUN { \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-RUN set -eux; \
-    	\
-    	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
-      chmod +x /usr/local/bin/merge2pdf
-## Copy Custom Fonts
-COPY fonts /usr/share/fonts/truetype
-RUN fc-cache -f -v
