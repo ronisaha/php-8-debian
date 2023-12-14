@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 
+ENV NODE_MAJOR=20
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
@@ -13,16 +14,16 @@ RUN set -eux; \
     apt-get install -y ca-certificates curl gnupg; \
     mkdir -p /etc/apt/keyrings; \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg; \
-    NODE_MAJOR=20 \
+    export NODE_MAJOR=20; \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list; \
     apt-get update; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
        libzip-dev \
         libyaml-dev \
-        gettext \
-        libmagickwand-dev\
-        librabbitmq-dev\
+        gettext graphviz \
+        libmagickwand-dev \
+        librabbitmq-dev \
         libpq-dev  \
         imagemagick \
         libxslt1-dev \
