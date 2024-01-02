@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.2.13
+ARG PHP_VERSION=8.2.14
 FROM php:${PHP_VERSION}-apache-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
