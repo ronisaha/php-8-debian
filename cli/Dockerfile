@@ -14,7 +14,7 @@ RUN set -eux; \
 		libicu-dev \
     libzip-dev \
         libyaml-dev \
-        gettext \
+        gettext graphviz \
         libmagickwand-dev\
         librabbitmq-dev\
         libpq-dev  \
