@@ -28,7 +28,7 @@ jobs:
 
             tmpName="image-$RANDOM"
             docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
-            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.IMAGE_NAME }}
+            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 
             docker tag $tmpName $IMAGE_ID:$VERSION
             docker push $IMAGE_ID:$VERSION
