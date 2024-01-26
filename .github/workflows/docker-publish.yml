@@ -24,7 +24,7 @@ jobs:
           do
             folder=${dockerFilePath%"/Dockerfile"}
             VERSION=${folder##*/}
-            PHP_VERSION=8.3.1
+            PHP_VERSION=8.3.2
 
             tmpName="image-$RANDOM"
             docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
