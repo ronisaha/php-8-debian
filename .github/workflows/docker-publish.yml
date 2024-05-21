@@ -24,7 +24,7 @@ jobs:
           do
             folder=${dockerFilePath%"/Dockerfile"}
             VERSION=${folder##*/}
-            PHP_VERSION=8.2.18
+            PHP_VERSION=8.2.19
 
             tmpName="image-$RANDOM"
             cp -r fonts $folder/
