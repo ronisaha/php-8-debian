@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '**/Dockerfile'
+
 jobs:
   push:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        image-variant: [ 'apache', 'cli', 'fpm', 'supervisor', 'dev', 'oci', 'supervisor-oci' ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,24 +22,25 @@ jobs:
 
       - name: Build and push the images
         run: |
-          for dockerFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "Dockerfile");
-          do
-            folder=${dockerFilePath%"/Dockerfile"}
-            VERSION=${folder##*/}
-            PHP_VERSION=8.3.8
+          VERSION=${{ matrix.image-variant }}
+          PHP_SHORT_VERSION=8.3
+          PHP_VERSION=8.3.8
 
-            tmpName="image-$RANDOM"
-            docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION
-            if [ $? -ne 0 ]; then 
-            echo "Docker build failed, for ${VERSION}-$PHP_VERSION"
-              continue
-            fi
-            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
+          tmpName="image-$RANDOM"
+          docker build $VERSION --file $VERSION/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION
+          if [ $? -ne 0 ]; then 
+          echo "Docker build failed, for ${VERSION}-$PHP_VERSION"
+            exit 1
+          fi
+          IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 
-            docker tag $tmpName $IMAGE_ID:$VERSION
-            docker push $IMAGE_ID:$VERSION
-            docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
-            docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
-            if [ "$VERSION" == "fpm" ]; then docker tag $tmpName $IMAGE_ID:latest; fi
-            if [ "$VERSION" == "fpm" ]; then docker push $IMAGE_ID:latest; fi
-          done;
+          docker tag $tmpName $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
+          docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
+          docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
+          docker push $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
+          if [ "$VERSION" == "fpm" ]; then 
+            docker tag $tmpName $IMAGE_ID:latest
+            docker push $IMAGE_ID:latest
+          fi
