@@ -27,7 +27,11 @@ jobs:
             PHP_VERSION=8.3.8
 
             tmpName="image-$RANDOM"
-            docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
+            docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION
+            if [ $? -ne 0 ]; then 
+            echo "Docker build failed, for ${VERSION}-$PHP_VERSION"
+              continue
+            fi
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 
             docker tag $tmpName $IMAGE_ID:$VERSION
