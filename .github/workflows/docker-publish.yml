@@ -25,10 +25,10 @@ jobs:
         run: |
           VERSION=${{ matrix.image-variant }}
           PHP_SHORT_VERSION=8.2
-          PHP_VERSION=8.2.20
+          PHP_VERSION=8.2.19
 
           tmpName="image-$RANDOM"
-          cp -r fonts $folder/
+          cp -r fonts $VERSION/
           docker build $VERSION --file $VERSION/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION
           if [ $? -ne 0 ]; then 
           echo "Docker build failed, for ${VERSION}-$PHP_VERSION"
