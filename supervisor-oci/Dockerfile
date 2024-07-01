@@ -51,7 +51,7 @@ RUN set -eux; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
     ;\
     unzip instantclient-basiclite-linuxx64.zip ; \
-    unzip instantclient-sdk-linuxx64.zip ;\
+    unzip -o instantclient-sdk-linuxx64.zip ;\
     rm -f instantclient-basiclite-linuxx64.zip; \
     rm -f instantclient-sdk-linuxx64.zip; \
     mv instantclient*/ /usr/lib/instantclient; \
