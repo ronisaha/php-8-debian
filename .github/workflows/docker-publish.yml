@@ -36,8 +36,6 @@ jobs:
           fi
           IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 
-          docker tag $tmpName $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
           docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
           docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
           docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
