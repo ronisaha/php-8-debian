@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.2.20
+ARG PHP_VERSION=8.2.19
 FROM php:${PHP_VERSION}-cli-bullseye
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -66,7 +66,7 @@ RUN set -eux; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
     ;\
     unzip instantclient-basiclite-linuxx64.zip ; \
-    unzip instantclient-sdk-linuxx64.zip ;\
+    unzip -o instantclient-sdk-linuxx64.zip ;\
     rm -f instantclient-basiclite-linuxx64.zip; \
     rm -f instantclient-sdk-linuxx64.zip; \
     mv instantclient*/ /usr/lib/instantclient; \

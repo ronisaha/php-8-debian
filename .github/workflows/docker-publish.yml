@@ -9,7 +9,10 @@ on:
 jobs:
   push:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        image-variant: [ 'apache', 'cli', 'fpm', 'supervisor', 'dev' ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,19 +23,21 @@ jobs:
 
       - name: Build and push the images
         run: |
-          for dockerFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "Dockerfile");
-          do
-            folder=${dockerFilePath%"/Dockerfile"}
-            VERSION=${folder##*/}
-            PHP_VERSION=8.2.20
+          VERSION=${{ matrix.image-variant }}
+          PHP_SHORT_VERSION=8.2
+          PHP_VERSION=8.2.19
 
-            tmpName="image-$RANDOM"
-            cp -r fonts $folder/
-            docker build $folder --file $folder/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION 
-            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
+          tmpName="image-$RANDOM"
+          docker build $VERSION --file $VERSION/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION
+          if [ $? -ne 0 ]; then 
+          echo "Docker build failed, for ${VERSION}-$PHP_VERSION"
+            exit 1
+          fi
+          IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 
-            docker tag $tmpName $IMAGE_ID:$VERSION
-            docker push $IMAGE_ID:$VERSION
-            docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
-            docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
-          done;
+          docker tag $tmpName $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
+          docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
+          docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
+          docker push $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
