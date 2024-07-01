@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image-variant: [ 'oci', 'supervisor-oci' ]
+        image-variant: [ 'apache', 'cli', 'fpm', 'supervisor', 'dev', 'oci', 'supervisor-oci' ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,6 +38,8 @@ jobs:
           docker push $IMAGE_ID:$VERSION
           docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_VERSION
           docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
+          docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
+          docker push $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
           if [ "$VERSION" == "fpm" ]; then 
             docker tag $tmpName $IMAGE_ID:latest
             docker push $IMAGE_ID:latest
