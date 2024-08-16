@@ -25,7 +25,7 @@ jobs:
         run: |
           VERSION=${{ matrix.image-variant }}
           PHP_SHORT_VERSION=8.2
-          PHP_VERSION=8.2.21
+          PHP_VERSION=8.2.22
 
           tmpName="image-$RANDOM"
           cp -r fonts $VERSION/
