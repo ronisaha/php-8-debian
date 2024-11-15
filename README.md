@@ -48,3 +48,6 @@ This use the fpm base image with oci8 extension enabled.
 
 ### php-8-debian:oci or php-8-debian:supervisor-oci-{php-version}
 This use the fpm base image with oci8 extension enabled and set supervisor as entry point. Mount any supervisor config file as /etc/supervisor/conf.d/*.conf
+
+### php-8-debian:franken or php-8-debian:franken-{php-version}
+This use the dunglas/frankenphp base image
