@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN set -eux; \
 	install-php-extensions \
 		redis \
+        amqp \
         mongodb \
         pdo_pgsql \
         pdo_mysql \
