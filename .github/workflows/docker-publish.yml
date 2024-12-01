@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - 8.2.x
-    paths:
-      - '**/Dockerfile'
+
 jobs:
   push:
     runs-on: ubuntu-latest
@@ -25,7 +24,7 @@ jobs:
         run: |
           VERSION=${{ matrix.image-variant }}
           PHP_SHORT_VERSION=8.2
-          PHP_VERSION=8.2.25
+          PHP_VERSION=8.2.26
 
           tmpName="image-$RANDOM"
           cp -r fonts $VERSION/
