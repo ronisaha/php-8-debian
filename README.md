@@ -1,5 +1,5 @@
 # php-8-debian
-Docker image with php:8.3.x-bullseye
+Docker image with php:8.4.x-bookworm
 
 All image contain following php extension and [composer](https://github.com/composer/composer).
 
