@@ -11,7 +11,6 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 #install exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
@@ -21,7 +20,6 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
-        imagemagick \
         libxslt1-dev \
         \
         libjpeg62-turbo \
@@ -53,7 +51,7 @@ RUN set -eux; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions gd Imagick/imagick@master amqp; \
+  install-php-extensions gd amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\

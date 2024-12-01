@@ -8,7 +8,6 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
@@ -18,7 +17,6 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
-        imagemagick \
         libxslt1-dev \
         libjpeg62-turbo \
         libpng16-16 \
@@ -64,7 +62,7 @@ RUN set -eux; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
         ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions gd Imagick/imagick@master amqp; \
+  install-php-extensions gd amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\
