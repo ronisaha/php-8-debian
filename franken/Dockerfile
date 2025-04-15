@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.3.19
+ARG PHP_VERSION=8.3.20
 FROM dunglas/frankenphp:1-php${PHP_VERSION}-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
