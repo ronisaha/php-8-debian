@@ -76,7 +76,8 @@ RUN set -eux; \
     ldconfig ;\
 	echo 'instantclient,/usr/lib/instantclient' | pecl install oci8; \
     pecl install xdebug; \
-	docker-php-ext-enable oci8 xdebug; \
+    pecl install mongodb; \
+	docker-php-ext-enable oci8 xdebug mongodb; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
