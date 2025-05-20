@@ -36,7 +36,8 @@ RUN set -eux; \
   pecl install apcu; \
   pecl install yaml; \
   pecl install igbinary; \
-  docker-php-ext-enable apcu yaml igbinary; \
+  pecl install mongodb; \
+  docker-php-ext-enable apcu yaml igbinary mongodb; \
   docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
