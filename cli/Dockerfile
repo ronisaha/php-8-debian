@@ -55,9 +55,7 @@ RUN set -eux; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
     pecl install xdebug; \
-    pecl install mongodb; \
 	docker-php-ext-enable xdebug; \
-	docker-php-ext-enable mongodb; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
