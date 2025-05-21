@@ -34,7 +34,8 @@ RUN set -eux; \
   pecl install apcu; \
   pecl install yaml; \
   pecl install igbinary; \
-  docker-php-ext-enable apcu yaml igbinary; \
+  pecl install mongodb; \
+  docker-php-ext-enable apcu yaml igbinary mongodb; \
   docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
@@ -54,7 +55,9 @@ RUN set -eux; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
     pecl install xdebug; \
+    pecl install mongodb; \
 	docker-php-ext-enable xdebug; \
+	docker-php-ext-enable mongodb; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
