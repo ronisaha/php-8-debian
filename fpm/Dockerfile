@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4.9
+ARG PHP_VERSION=8.4.10
 FROM php:${PHP_VERSION}-fpm-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
