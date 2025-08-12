@@ -2,6 +2,8 @@ ARG PHP_VERSION=8.4.11
 
 FROM dunglas/frankenphp:1-builder-php${PHP_VERSION}-bookworm AS builder
 
+COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
+
 # CGO must be enabled to build FrankenPHP
 RUN CGO_ENABLED=1 \
     XCADDY_SETCAP=1 \
