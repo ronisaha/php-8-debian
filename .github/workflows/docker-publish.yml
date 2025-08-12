@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image-variant: [ 'supervisor-franken' ]
+        image-variant: [ 'franken', 'apache', 'cli', 'fpm', 'supervisor', 'dev', 'oci', 'supervisor-oci', 'supervisor-franken' ]
     steps:
       - uses: actions/checkout@v3
         with:
