@@ -28,6 +28,7 @@ All image contain following php extension and [composer](https://github.com/comp
 - xdebug(Only in cli and dev variant)
 
 ## Image Variants
+
 ### php-8-debian:cli or php-8-debian:cli-{php-version}
 This use the cli base image with xdebug enabled, also contain nodejs-20.x and npm
 
@@ -51,3 +52,6 @@ This use the fpm base image with oci8 extension enabled and set supervisor as en
 
 ### php-8-debian:franken or php-8-debian:franken-{php-version}
 This use the dunglas/frankenphp base image
+
+### php-8-debian:franken or php-8-debian:supervisor-franken-{php-version}
+This use the dunglas/frankenphp base image with github.com/baldinof/caddy-supervisor module
