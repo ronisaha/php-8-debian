@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.3.25
-FROM php:${PHP_VERSION}-fpm-bullseye
+FROM php:${PHP_VERSION}-fpm-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
@@ -8,7 +8,6 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \

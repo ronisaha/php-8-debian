@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.3.25
-FROM php:${PHP_VERSION}-cli-bullseye
+FROM php:${PHP_VERSION}-cli-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
@@ -9,7 +9,6 @@ ENV NODE_MAJOR=20
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
     apt-get install -y ca-certificates curl gnupg; \
     mkdir -p /etc/apt/keyrings; \
