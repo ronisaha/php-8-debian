@@ -3,7 +3,7 @@ name: Docker
 on:
   push:
     branches:
-      - main
+      - 8.4.x
 
 jobs:
   push:
@@ -40,7 +40,3 @@ jobs:
           docker push $IMAGE_ID:${VERSION}-$PHP_VERSION
           docker tag $tmpName $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
           docker push $IMAGE_ID:${VERSION}-$PHP_SHORT_VERSION
-          if [ "$VERSION" == "fpm" ]; then 
-            docker tag $tmpName $IMAGE_ID:latest
-            docker push $IMAGE_ID:latest
-          fi
