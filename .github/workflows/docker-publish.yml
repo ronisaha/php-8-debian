@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image-variant: [ 'franken', 'apache', 'cli', 'fpm', 'supervisor', 'dev', 'oci', 'supervisor-oci', 'supervisor-franken' ]
+        image-variant: [ 'franken', 'apache', 'cli', 'fpm', 'supervisor', 'dev', 'supervisor-franken' ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,8 +23,8 @@ jobs:
       - name: Build and push the images
         run: |
           VERSION=${{ matrix.image-variant }}
-          PHP_SHORT_VERSION=8.4
-          PHP_VERSION=8.4.15
+          PHP_SHORT_VERSION=8.5
+          PHP_VERSION=8.5.0
 
           tmpName="image-$RANDOM"
           docker build $VERSION --file $VERSION/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION

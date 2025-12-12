@@ -1,9 +1,9 @@
-ARG PHP_VERSION=8.4.15
+ARG PHP_VERSION=8.5.0
 FROM php:${PHP_VERSION}-apache-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
-ENV APACHE_DOCUMENT_ROOT /var/www/public
+ENV APACHE_DOCUMENT_ROOT=/var/www/public
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
@@ -31,7 +31,6 @@ RUN set -eux; \
   pecl install igbinary; \
   pecl install mongodb; \
   docker-php-ext-enable apcu yaml igbinary mongodb; \
-  docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -39,13 +38,13 @@ RUN set -eux; \
         bcmath \
         xsl \
         gettext \
-        opcache \
         pdo \
         pdo_mysql \
         pdo_pgsql \
         pgsql \
         soap \
         zip \
+        gd \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
@@ -55,7 +54,7 @@ RUN set -eux; \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
 	\
-    install-php-extensions gd amqp; \
+    install-php-extensions php-amqp/php-amqp@977449987412a3d5c59a036dbab8b6d67764bb3e; \
       rm -f /usr/local/bin/install-php-extensions; \
 	docker-php-source delete ;\
 	apt-get remove -y g++ wget ;\

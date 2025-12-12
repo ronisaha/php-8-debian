@@ -1,11 +1,9 @@
-ARG PHP_VERSION=8.4.15
+ARG PHP_VERSION=8.5.0
 FROM php:${PHP_VERSION}-cli-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
-ENV LD_LIBRARY_PATH=/usr/lib/instantclient
-
-ENV NODE_MAJOR=20
+ENV NODE_MAJOR=24
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
@@ -13,7 +11,7 @@ RUN set -eux; \
     apt-get install -y ca-certificates curl gnupg; \
     mkdir -p /etc/apt/keyrings; \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg; \
-    export NODE_MAJOR=20; \
+    export NODE_MAJOR=24; \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list; \
     apt-get update; \
 	apt-get install -y libaio1 wget unzip \
@@ -36,7 +34,6 @@ RUN set -eux; \
   pecl install igbinary; \
   pecl install mongodb; \
   docker-php-ext-enable apcu yaml igbinary mongodb; \
-  docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -44,13 +41,13 @@ RUN set -eux; \
         bcmath \
         xsl \
         gettext \
-        opcache \
         pdo \
         pdo_mysql \
         pdo_pgsql \
         pgsql \
         soap \
         zip \
+        gd \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
@@ -59,7 +56,7 @@ RUN set -eux; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions gd amqp; \
+  install-php-extensions php-amqp/php-amqp@977449987412a3d5c59a036dbab8b6d67764bb3e; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\

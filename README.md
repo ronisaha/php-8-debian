@@ -1,5 +1,5 @@
 # php-8-debian
-Docker image with php:8.4.x-bookworm
+Docker image with php:8.5.x-bookworm
 
 All image contain following php extension and [composer](https://github.com/composer/composer).
 
@@ -13,7 +13,6 @@ All image contain following php extension and [composer](https://github.com/comp
 - PDO
 - pdo_pgsql
 - pdo_mysql
-- oci8(Only in oci variant)
 - SimpleXML
 - tokenizer
 - Zend OPcache
@@ -43,12 +42,6 @@ This use the apache base image with xdebug enabled
 
 ### php-8-debian:supervisor or php-8-debian:supervisor-{php-version}
 This use the cli base image and set supervisor as entry point. Mount any supervisor config file as /etc/supervisor/conf.d/*.conf
-
-### php-8-debian:oci or php-8-debian:oci-{php-version}
-This use the fpm base image with oci8 extension enabled.
-
-### php-8-debian:oci or php-8-debian:supervisor-oci-{php-version}
-This use the fpm base image with oci8 extension enabled and set supervisor as entry point. Mount any supervisor config file as /etc/supervisor/conf.d/*.conf
 
 ### php-8-debian:franken or php-8-debian:franken-{php-version}
 This use the dunglas/frankenphp base image

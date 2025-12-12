@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4.15
+ARG PHP_VERSION=8.5.0
 
 FROM dunglas/frankenphp:1-builder-php${PHP_VERSION}-bookworm AS builder
 
@@ -37,7 +37,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN set -eux; \
 	install-php-extensions \
 		redis \
-        amqp \
         mongodb \
         pdo_pgsql \
         pdo_mysql \
@@ -51,6 +50,5 @@ RUN set -eux; \
             yaml \
             xsl \
             gettext \
-            opcache \
             sockets \
 	;
