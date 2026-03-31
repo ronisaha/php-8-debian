@@ -1,14 +1,23 @@
-ARG PHP_VERSION=8.5.0
+ARG PHP_VERSION=8.5.4
 FROM php:${PHP_VERSION}-cli-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 
+RUN set -eux; \
+    export DEBIAN_FRONTEND=noninteractive; \
+    echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries; \
+    echo 'Acquire::http::Timeout "30";' > /etc/apt/apt.conf.d/80-timeout; \
+    if [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+        sed -i 's/^Components: main$/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources; \
+    elif [ -f /etc/apt/sources.list ]; then \
+        sed -i'.bak' 's/ main$/ main contrib non-free/' /etc/apt/sources.list; \
+    fi; \
+    echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
+
 #install Exetentions and dependencies
 RUN set -eux; \
-	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip supervisor \
 		libicu-dev \
