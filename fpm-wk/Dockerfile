@@ -17,7 +17,7 @@ RUN set -eux; \
 #install Exetentions and dependencies
 RUN set -eux; \
 	apt-get update && apt-get -y upgrade; \
-	apt-get install -y libaio1 wget unzip \
+	apt-get install -y --fix-missing libaio1 wget unzip \
 		libicu-dev \
         libzip-dev \
         libyaml-dev \
