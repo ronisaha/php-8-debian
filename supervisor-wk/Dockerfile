@@ -1,14 +1,16 @@
 ARG PHP_VERSION=8.5.0
-FROM php:${PHP_VERSION}-fpm-bookworm
+FROM php:${PHP_VERSION}-cli-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
+
+ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
 	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
-	apt-get install -y libaio1 wget unzip \
+	apt-get install -y libaio1 wget unzip supervisor \
 		libicu-dev \
         libzip-dev \
         libyaml-dev \
@@ -18,7 +20,6 @@ RUN set -eux; \
         libpq-dev  \
         imagemagick \
         libxslt1-dev \
-        \
         fontconfig \
         libfreetype6 \
         libjpeg62-turbo \
@@ -55,23 +56,22 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
-    cd /tmp; \
-      curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
-      dpkg -i wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
-      rm -rf wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
-  	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
+   curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+         dpkg -i wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+         rm -rf wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+    curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
     chmod +x /usr/local/bin/install-php-extensions ; \
     install-php-extensions php-amqp/php-amqp@977449987412a3d5c59a036dbab8b6d67764bb3e; \
     rm -f /usr/local/bin/install-php-extensions; \
-  	\
-  	docker-php-source delete ;\
-  	apt-get remove -y g++ wget ;\
-  	apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y ;\
+    \
+    docker-php-source delete ;\
+    apt-get remove -y g++ wget ;\
+    apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y ;\
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /tmp/* /var/tmp/*;
 
-## Set php configuration overrides
+## Set php configuration
 RUN { \
             echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini ; \
@@ -94,12 +94,7 @@ RUN { \
         echo 'ignore_repeated_errors = On'; \
         echo 'ignore_repeated_source = Off'; \
         echo 'html_errors = Off'; \
-    } > /usr/local/etc/php/conf.d/error-logging.ini ; \
-    { \
-            echo 'request_terminate_timeout = 300'; \
-            echo 'rlimit_files = 131072'; \
-            echo 'rlimit_core = unlimited'; \
-    } >> /usr/local/etc/php-fpm.d/zz-docker.conf
+    } > /usr/local/etc/php/conf.d/error-logging.ini
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -109,6 +104,11 @@ RUN set -eux; \
     	\
     	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
       chmod +x /usr/local/bin/merge2pdf
+
 ## Copy Custom Fonts
 COPY fonts /usr/share/fonts/truetype
 RUN fc-cache -f -v
+
+#Make supervisor ad entrypoint
+ENTRYPOINT ["/usr/bin/supervisord"]
+CMD ["-c", "/etc/supervisor/supervisord.conf", "-n"]

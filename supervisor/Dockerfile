@@ -8,6 +8,7 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
+	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip supervisor \
 		libicu-dev \
@@ -17,17 +18,27 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
+        imagemagick \
         libxslt1-dev \
-        \
+        fontconfig \
+        libfreetype6 \
         libjpeg62-turbo \
         libpng16-16 \
-    ; \
-    \
-    pecl install apcu; \
+        libx11-6 \
+        libxcb1 \
+        libxext6 \
+        libxrender1 \
+        xfonts-75dpi \
+        xfonts-base \
+        ttf-mscorefonts-installer \
+	; \
+	\
+	pecl install apcu; \
   pecl install yaml; \
   pecl install igbinary; \
   pecl install mongodb; \
   docker-php-ext-enable apcu yaml igbinary mongodb; \
+  docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -45,6 +56,10 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
+    cd /tmp; \
+    	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+      dpkg -i wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+      rm -rf wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
     curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
     chmod +x /usr/local/bin/install-php-extensions ; \
@@ -86,6 +101,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Make supervisor as entrypoint
+RUN set -eux; \
+    	\
+    	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
+      chmod +x /usr/local/bin/merge2pdf
+
+## Copy Custom Fonts
+COPY fonts /usr/share/fonts/truetype
+RUN fc-cache -f -v
+
+#Make supervisor ad entrypoint
 ENTRYPOINT ["/usr/bin/supervisord"]
 CMD ["-c", "/etc/supervisor/supervisord.conf", "-n"]
