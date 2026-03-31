@@ -6,7 +6,6 @@ LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 #install Exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
@@ -16,20 +15,10 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
-        imagemagick \
         libxslt1-dev \
         \
-        fontconfig \
-        libfreetype6 \
         libjpeg62-turbo \
         libpng16-16 \
-        libx11-6 \
-        libxcb1 \
-        libxext6 \
-        libxrender1 \
-        xfonts-75dpi \
-        xfonts-base \
-        ttf-mscorefonts-installer \
 	; \
 	\
 	pecl install apcu; \
@@ -37,7 +26,6 @@ RUN set -eux; \
   pecl install igbinary; \
   pecl install mongodb; \
   docker-php-ext-enable apcu yaml igbinary mongodb; \
-  docker-php-ext-install -j$(nproc) iconv; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -55,10 +43,6 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
-    cd /tmp; \
-      curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
-      dpkg -i wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
-      rm -rf wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
   	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
     ; \
     chmod +x /usr/local/bin/install-php-extensions ; \
@@ -104,11 +88,3 @@ RUN { \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-RUN set -eux; \
-    	\
-    	curl -L https://github.com/ajaxray/merge2pdf/releases/download/v1.1.0/merge2pdf_linux-amd64.OS -o /usr/local/bin/merge2pdf; \
-      chmod +x /usr/local/bin/merge2pdf
-## Copy Custom Fonts
-COPY fonts /usr/share/fonts/truetype
-RUN fc-cache -f -v
