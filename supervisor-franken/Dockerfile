@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.5.1
+ARG PHP_VERSION=8.5.2
 
 FROM dunglas/frankenphp:1-builder-php${PHP_VERSION}-bookworm AS builder
 
