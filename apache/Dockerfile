@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.2.30
-FROM php:${PHP_VERSION}-apache-bullseye
+FROM php:${PHP_VERSION}-apache-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
 
