@@ -5,6 +5,7 @@ All image contain following php extension and [composer](https://github.com/comp
 
 - bcmath
 - gd
+- Imagick
 - intl
 - json
 - libxml
