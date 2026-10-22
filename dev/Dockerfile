@@ -48,7 +48,7 @@ RUN set -eux; \
         sockets; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
-    pecl install xdebug \
+    pecl install xdebug; \
     docker-php-ext-enable xdebug; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \

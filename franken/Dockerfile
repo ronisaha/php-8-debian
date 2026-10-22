@@ -21,7 +21,6 @@ RUN set -eux; \
             apcu \
             gd \
             intl \
-            opcache \
             zip \
             igbinary \
             yaml \

@@ -1,7 +1,7 @@
 # php-8-debian
-Docker image with php:8.5.x-bookworm
+Docker images with PHP 8.5.12 on Debian Bookworm.
 
-All image contain following php extension and [composer](https://github.com/composer/composer).
+All variants provide the following PHP extensions (including extensions inherited from their base images):
 
 - bcmath
 - gd
@@ -16,20 +16,21 @@ All image contain following php extension and [composer](https://github.com/comp
 - SimpleXML
 - tokenizer
 - Zend OPcache
-- amqp
 - redis
 - apcu
 - yaml
 - zip
 - curl
-- exif
 - iconv
 - xsl
-- soap
-- pgsql
 - igbinary
 - mongodb
-- xdebug(Only in cli and dev variant)
+
+The `apache`, `cli`, `dev`, `fpm`, `supervisor`, and `oci` variants also provide
+AMQP, EXIF, SOAP, PostgreSQL (`pgsql`), and [Composer](https://github.com/composer/composer).
+Xdebug is installed only in `cli` and `dev`. The `oci` variant additionally provides OCI8.
+The FrankenPHP variants have their own extension set and do not install Composer.
+OPcache is built into PHP 8.5 and does not need to be compiled or loaded separately.
 
 ## Image Variants
 
@@ -53,3 +54,36 @@ This use the dunglas/frankenphp base image
 
 ### php-8-debian:supervisor-franken or php-8-debian:supervisor-franken-{php-version}
 This use the dunglas/frankenphp base image with github.com/baldinof/caddy-supervisor module
+The custom binary uses the FrankenPHP and Caddy integration source bundled with
+the PHP-matched builder image, plus Brotli, Mercure, and Supervisor modules.
+
+### php-8-debian:oci or php-8-debian:oci-{php-version}
+This uses the FPM base image with OCI8 and Oracle Instant Client. The Oracle
+downloads currently target Linux x86-64, so build and run this variant on `linux/amd64`.
+
+## Building and validation
+
+Each Dockerfile defaults to PHP `8.5.12`. Build and validate a variant from the repository root:
+
+```sh
+docker build --pull --platform linux/amd64 --build-arg PHP_VERSION=8.5.12 \
+  -t php-8-debian:check-fpm fpm
+bash scripts/smoke-test.sh php-8-debian:check-fpm fpm 8.5.12
+```
+
+Replace `fpm` with the desired variant. The smoke checks verify the exact PHP
+version, extensions, PDO drivers, serialization, and variant-specific tools.
+Apache and FrankenPHP checks execute PHP over HTTP; Supervisor checks a PHP child
+process. OCI checks load the client library; database connectivity requires a
+separate integration test against an Oracle server.
+
+CI builds all eight variants on `linux/amd64` for pull requests and main-branch
+pushes. Each image must pass its smoke checks before it is published on a push to
+`main`. Publication writes `{variant}-8.5.12`, `{variant}-8.5`, and `{variant}` tags;
+FPM also updates `latest`. Pull requests and manual runs only build and validate.
+
+The FrankenPHP variants require both upstream tags
+`dunglas/frankenphp:1-php8.5.12-bookworm` and
+`dunglas/frankenphp:1-builder-php8.5.12-bookworm`. Both tags were confirmed available
+on 2026-10-22. If a required tag is unavailable, wait for upstream publication;
+do not substitute an older PHP version for this security update.
