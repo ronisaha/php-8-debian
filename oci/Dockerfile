@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4.15
+ARG PHP_VERSION=8.5.12
 FROM php:${PHP_VERSION}-fpm-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -35,7 +35,6 @@ RUN set -eux; \
         bcmath \
         xsl \
         gettext \
-        opcache \
         pdo \
         pdo_mysql \
         pdo_pgsql \
@@ -46,13 +45,18 @@ RUN set -eux; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
 	cd /tmp; \
-	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip ; \
-	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
+    case "$(dpkg --print-architecture)" in \
+        amd64) oracle_arch=linuxx64 ;; \
+        arm64) oracle_arch=linux-arm64 ;; \
+        *) echo 'Unsupported Oracle Instant Client architecture' >&2; exit 1 ;; \
+    esac; \
+	wget -O instantclient-basiclite.zip "https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-${oracle_arch}.zip" ; \
+	wget -O instantclient-sdk.zip "https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-${oracle_arch}.zip" \
     ;\
-    unzip instantclient-basiclite-linuxx64.zip ; \
-    unzip -o instantclient-sdk-linuxx64.zip ;\
-    rm -f instantclient-basiclite-linuxx64.zip; \
-    rm -f instantclient-sdk-linuxx64.zip; \
+    unzip instantclient-basiclite.zip ; \
+    unzip -o instantclient-sdk.zip ;\
+    rm -f instantclient-basiclite.zip; \
+    rm -f instantclient-sdk.zip; \
     mv instantclient*/ /usr/lib/instantclient; \
     cd /usr/lib/instantclient ; \
     rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci; \
