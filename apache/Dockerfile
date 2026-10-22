@@ -20,6 +20,7 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
+        imagemagick \
         libxslt1-dev \
         \
         libjpeg62-turbo \
@@ -52,7 +53,7 @@ RUN set -eux; \
 	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
-  install-php-extensions gd amqp; \
+  install-php-extensions gd Imagick amqp; \
   rm -f /usr/local/bin/install-php-extensions; \
 	\
 	docker-php-source delete ;\
