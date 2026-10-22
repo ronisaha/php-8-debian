@@ -17,6 +17,7 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
+        imagemagick \
         libxslt1-dev \
         \
         libjpeg62-turbo \

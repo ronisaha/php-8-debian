@@ -20,6 +20,7 @@ RUN set -eux; \
         libmagickwand-dev \
         librabbitmq-dev \
         libpq-dev  \
+        imagemagick \
         libxslt1-dev \
         \
         libjpeg62-turbo \
@@ -54,7 +55,7 @@ RUN set -eux; \
   ; \
   chmod +x /usr/local/bin/install-php-extensions ; \
 	\
-    install-php-extensions php-amqp/php-amqp@977449987412a3d5c59a036dbab8b6d67764bb3e; \
+    install-php-extensions Imagick amqp; \
       rm -f /usr/local/bin/install-php-extensions; \
 	docker-php-source delete ;\
 	apt-get remove -y g++ wget ;\
