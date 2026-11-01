@@ -13,7 +13,7 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient
 #install exetentions and dependencies
 RUN set -eux; \
 	\
-	sed -i'.bak' 's/$/ contrib/' /etc/apt/sources.list; \
+	sed -i'.bak' 's/^Components: main$/Components: main contrib/' /etc/apt/sources.list.d/debian.sources; \
 	apt-get update && apt-get -y upgrade; \
 	apt-get install -y libaio1 wget unzip \
 		libicu-dev \
@@ -63,9 +63,9 @@ RUN set -eux; \
   echo 'yes,yes' | pecl install redis; \
   docker-php-ext-enable redis; \
 	cd /tmp; \
-	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-  dpkg -i wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-  rm -rf wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+	curl -L -O https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+  dpkg -i wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+  rm -rf wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip ; \
 	wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linuxx64.zip \
     ;\
