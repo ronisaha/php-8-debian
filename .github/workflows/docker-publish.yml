@@ -23,8 +23,8 @@ jobs:
       - name: Build and push the images
         run: |
           VERSION=${{ matrix.image-variant }}
-          PHP_SHORT_VERSION=8.5
-          PHP_VERSION=8.5.13
+          PHP_SHORT_VERSION=8.6
+          PHP_VERSION=8.6.0
 
           tmpName="image-$RANDOM"
           docker build $VERSION --file $VERSION/Dockerfile --tag $tmpName --build-arg PHP_VERSION=$PHP_VERSION

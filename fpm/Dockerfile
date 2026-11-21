@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.5.13
+ARG PHP_VERSION=8.6.0
 FROM php:${PHP_VERSION}-fpm-bookworm
 
 LABEL org.opencontainers.image.authors="Roni Kumar Saha <roni.csed@gmail.com>"
@@ -14,6 +14,7 @@ RUN set -eux; \
         gettext graphviz \
         libmagickwand-dev \
         librabbitmq-dev \
+        liblzf-dev \
         libpq-dev  \
         imagemagick \
         libxslt1-dev \
@@ -22,11 +23,26 @@ RUN set -eux; \
         libpng16-16 \
 	; \
 	\
-	pecl install apcu; \
-  pecl install yaml; \
-  pecl install igbinary; \
-    pecl install mongodb; \
-  docker-php-ext-enable apcu yaml igbinary mongodb; \
+	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
+  ; \
+  chmod +x /usr/local/bin/install-php-extensions ; \
+  install-php-extensions mongodb; \
+  # PHP 8.6 ships without PECL and the latest PECL releases of these extensions
+  # do not compile on 8.6 yet, so build them from pinned upstream sources.
+  # TODO: switch back to install-php-extensions once 8.6-compatible releases are out.
+  docker-php-source extract; \
+  fetch_ext() { mkdir -p /usr/src/php/ext/$1; curl -fsSL $2 | tar -xz --strip-components=1 -C /usr/src/php/ext/$1; }; \
+  fetch_ext apcu https://github.com/krakjoe/apcu/archive/66300e28647c16fef7672a5add532f4262b23a75.tar.gz; \
+  fetch_ext yaml https://github.com/php/pecl-file_formats-yaml/archive/a7a3b8680b8fbf0895fd63371a0ffc1305b1a5b8.tar.gz; \
+  fetch_ext igbinary https://github.com/igbinary/igbinary/archive/2b1f5d62e3037b07c2a46499ac32091cdb41fb40.tar.gz; \
+  fetch_ext redis https://github.com/phpredis/phpredis/archive/a6ce1e60b3e81ce3b25174aa5aaefd5590dc64fd.tar.gz; \
+  fetch_ext imagick https://github.com/Imagick/imagick/archive/55ed2e9fda264395636a2e27e51f31673f5566ab.tar.gz; \
+  # amqp has no 8.6 fix upstream yet (php-amqp/php-amqp#619): XtOffsetOf was removed in 8.6
+  fetch_ext amqp https://pecl.php.net/get/amqp-2.2.0.tgz; \
+  sed -i 's/XtOffsetOf/offsetof/g' /usr/src/php/ext/amqp/*.c /usr/src/php/ext/amqp/*.h; \
+  docker-php-ext-install -j$(nproc) apcu yaml igbinary imagick amqp; \
+  docker-php-ext-configure redis --enable-redis-igbinary --enable-redis-lzf --with-liblzf; \
+  docker-php-ext-install -j$(nproc) redis; \
   docker-php-ext-configure intl; \
   docker-php-ext-install -j$(nproc) intl; \
   docker-php-ext-install -j$(nproc) \
@@ -42,13 +58,7 @@ RUN set -eux; \
         zip \
         gd \
         sockets; \
-  echo 'yes,yes' | pecl install redis; \
-  docker-php-ext-enable redis; \
-  	curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions > /usr/local/bin/install-php-extensions \
-    ; \
-    chmod +x /usr/local/bin/install-php-extensions ; \
-    install-php-extensions Imagick amqp; \
-    rm -f /usr/local/bin/install-php-extensions; \
+  rm -f /usr/local/bin/install-php-extensions; \
   	\
   	docker-php-source delete ;\
   	apt-get remove -y g++ wget ;\
@@ -81,6 +91,7 @@ RUN { \
         echo 'html_errors = Off'; \
     } > /usr/local/etc/php/conf.d/error-logging.ini ; \
     { \
+            echo '[www]'; \
             echo 'request_terminate_timeout = 300'; \
             echo 'rlimit_files = 131072'; \
             echo 'rlimit_core = unlimited'; \
